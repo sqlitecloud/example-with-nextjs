@@ -17,22 +17,23 @@ interface Customers {
   // ...more columns
 }
 
-async function getCustomers(): Promise<{ customers: Customers[]; elapsedMs: number }> {
-  const startedOn = new Date().getTime()
+async function getCustomers(): Promise<{ customers: Customers[]; elapsedMs: number, receivedOn: string }> {
+  const startedOn = new Date()
 
   // read "customers" from "chinook.sqlite"
   const response = await fetch(`${SQLITECLOUD_URL}/v2/weblite/chinook.sqlite/tables/customers/rows`, {
+    cache: 'no-store', // This disables caching
     headers: {
       Authorization: `Bearer ${SQLITECLOUD_TOKEN}`
     }
   })
 
   const json = await response.json()
-  return { customers: json.data, elapsedMs: new Date().getTime() - startedOn }
+  return { customers: json.data, elapsedMs: new Date().getTime() - startedOn.getTime(), receivedOn: new Date().toISOString()  }
 }
 
 export default async function Home() {
-  const { customers, elapsedMs } = await getCustomers()
+  const { customers, elapsedMs, receivedOn } = await getCustomers()
 
   return (
     <main className={styles.main}>
@@ -66,34 +67,34 @@ export default async function Home() {
               ))}
           </tbody>
         </table>
-        <p style={{ marginTop: '24px' }}>Data received in {elapsedMs} ms</p>
+        <p style={{ marginTop: '24px' }}>{receivedOn} in {elapsedMs}ms</p>
       </div>
 
       <div className={styles.grid}>
         <a href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app" className={styles.card} target="_blank" rel="noopener noreferrer">
           <h2>
-            Docs <span>-&gt;</span>{' '}
+            Docs <span>-&gt;</span>
           </h2>
           <p>Find in-depth information about Next.js features and API.</p>
         </a>
 
         <a href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app" className={styles.card} target="_blank" rel="noopener noreferrer">
           <h2>
-            Learn <span>-&gt;</span>{' '}
+            Learn <span>-&gt;</span>
           </h2>
           <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
         </a>
 
         <a href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app" className={styles.card} target="_blank" rel="noopener noreferrer">
           <h2>
-            Templates <span>-&gt;</span>{' '}
+            Templates <span>-&gt;</span>
           </h2>
           <p>Explore starter templates for Next.js.</p>
         </a>
 
         <a href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app" className={styles.card} target="_blank" rel="noopener noreferrer">
           <h2>
-            Deploy <span>-&gt;</span>{' '}
+            Deploy <span>-&gt;</span>
           </h2>
           <p>Instantly deploy your Next.js site to a shareable URL with Vercel.</p>
         </a>
