@@ -17,7 +17,7 @@ interface Customers {
   // ...more columns
 }
 
-async function getCustomers(): Promise<{ customers: Customers[]; elapsedMs: number, receivedOn: string }> {
+async function getCustomers(): Promise<{ customers: Customers[]; elapsedMs: number; receivedOn: string }> {
   const startedOn = new Date()
 
   // read "customers" from "chinook.sqlite"
@@ -29,7 +29,7 @@ async function getCustomers(): Promise<{ customers: Customers[]; elapsedMs: numb
   })
 
   const json = await response.json()
-  return { customers: json.data, elapsedMs: new Date().getTime() - startedOn.getTime(), receivedOn: new Date().toISOString()  }
+  return { customers: json.data, elapsedMs: new Date().getTime() - startedOn.getTime(), receivedOn: new Date().toISOString() }
 }
 
 export default async function Home() {
@@ -38,8 +38,10 @@ export default async function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>Get started by editing&nbsp;<code className={styles.code}>src/app/page.tsx</code> v1.0.1</p>
-                <div>
+        <p>
+          Get started by editing&nbsp;<code className={styles.code}>src/app/page.tsx</code> v1.0.2
+        </p>
+        <div>
           <a href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
             By <Image src="/vercel.svg" alt="Vercel Logo" className={styles.vercelLogo} width={100} height={24} priority />
           </a>
@@ -64,7 +66,9 @@ export default async function Home() {
               ))}
           </tbody>
         </table>
-        <p style={{ marginTop: '24px' }}>{receivedOn} in {elapsedMs}ms</p>
+        <p style={{ marginTop: '24px' }}>
+          {receivedOn} in {elapsedMs}ms
+        </p>
       </div>
 
       <div className={styles.grid}>
